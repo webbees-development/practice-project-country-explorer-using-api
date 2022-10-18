@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;600;800&display=swap');
+
+$break-point: 37.5rem;
+
+/* reset basic styles */
+*, *::before, *::after {
+    box-sizing: border-box;
+
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    min-height: 100vh;
+
+    overflow-x: hidden;
+}
+
+/* variables */
+:root {
+    --clr-dark-elements: hsl(209, 23%, 22%);
+    --clr-dark-bg: hsl(207, 26%, 17%);
+    --clr-dark-text: hsl(0, 0%, 100%);
+    --clr-dark-input: hsl(0, 0%, 52%); /* should be changed or at least checked */
+
+    --clr-light-elements: hsl(0, 0%, 100%);
+    --clr-light-bg: hsl(0, 0%, 98%);
+    --clr-light-text: hsl(200, 15%, 8%);
+    --clr-light-input: hsl(0, 0%, 52%);
+}
+
+/* utilities */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+/* styles */
+body {
+    font-family: "Nunito Sans", sans-serif;
+
+    color: var(--clr-text);
+    background-color: var(--clr-bg);
+
+    transition: all 400ms ease-in-out;
+}
+
+body.light {
+    --clr-elements: var(--clr-light-elements);
+    --clr-bg: var(--clr-light-bg);
+    --clr-text: var(--clr-light-text);
+    --clr-input: var(--clr-light-input);
+}
+
+body.dark {
+    --clr-elements: var(--clr-dark-elements);
+    --clr-bg: var(--clr-dark-bg);
+    --clr-text: var(--clr-dark-text);
+    --clr-input: var(--clr-dark-input);
+}
+
+.container {
+    padding-inline: 1rem;
+
+    @media (min-width: $break-point) {
+        padding-inline: 4rem;
+    }
+}

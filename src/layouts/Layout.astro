@@ -1,0 +1,41 @@
+---
+import Header from '../components/Header.astro';
+
+import '../styles/global.scss';
+
+export interface Props {
+	title: string;
+	baseFontSize?: string;
+}
+
+const { title, baseFontSize = '16px' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/png" href="images/favicon-32x32.png" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body class="light">
+		<Header />
+		<main class="container">
+			<slot />
+		</main>
+	</body>
+</html>
+
+<style lang="scss" is:global define:vars={{ baseFontSize }}>
+	@import "../styles/global.scss";
+
+	body {
+		font-size: var(--baseFontSize);
+	}
+
+	main {
+		margin-block: 1.5rem;
+	}
+</style>

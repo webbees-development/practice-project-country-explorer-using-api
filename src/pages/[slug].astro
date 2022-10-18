@@ -1,0 +1,230 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+    const response = await fetch('https://restcountries.com/v3.1/all');
+    const data = await response.json();
+    const countries = Object.values(data);
+
+    type Country = {
+        name: {
+            official: string;
+        }
+    }
+
+    function isCountry(obj: any): obj is Country {
+        return (
+            typeof obj === 'object' &&
+            obj !== null &&
+            'name' in obj &&
+            'official' in obj.name
+        );
+    }
+
+    return countries.map(country => {
+        if (isCountry(country)) {
+            return ({
+                params: {
+                    slug: country.name.official.replaceAll(' ', '-').toLowerCase()
+                },
+                props: {
+                    country,
+                    countries
+                }
+            });
+        }
+    });
+}
+
+const { name, population, region, subregion, capital, tld, currencies, languages, flags, borders } = Astro.props.country;
+const countries = Astro.props.countries;
+
+
+const borderCountries = borders ? borders.map(code => {
+    const borderingCountry = countries.find(country => country.cca3 === code);
+    return borderingCountry.name.common;
+}) : [];
+
+
+---
+
+<Layout title={`Country Explorer - ${name.official}`}>
+
+    <a class="btn-back" href="/">Back</a>
+
+    <article>
+        <div class="image-container">
+            <img src={ flags.png } alt="">
+        </div>
+        <div class="content">
+            <h1>{ name.common }</h1>
+
+            <div class="desktop-flex">
+                <ul class="stats-1">
+                    <li><strong>Native Name: </strong><span>{ name.nativeName[Object.keys(languages)[0]].common }</span></li>
+                    <li><strong>Population: </strong><span>{ population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span></li>
+                    <li><strong>Region: </strong><span>{ region }</span></li>
+                    <li><strong>Sub Region: </strong><span>{ subregion }</span></li>
+                    <li><strong>Capital: </strong><span>{ capital }</span></li>
+                </ul>
+    
+                <ul class="stats-2">
+                    <li><strong>Top Level Domain: </strong><span>{ tld }</span></li>
+                    <li><strong>Currencies: </strong>{ currencies && Object.values(currencies).map((item) => (<span>{item['name']}</span>)) }</li>
+                    <li><strong>Languages: </strong>{ Object.values(languages).map((item) => (<span>{item}</span>)) }</li>
+                </ul>
+            </div>
+            
+            <ul class="borders">
+                <h2>Border Countries:</h2>
+                { borderCountries.map((country) => (<li><a href={`/${country.replaceAll(' ', '-').toLowerCase()}`}>{country}</a></li>)) }
+            </ul>
+        </div>
+    </article>
+</Layout>
+
+<style lang="scss">
+    @import "../styles/global.scss";
+
+    article {
+        margin-inline: 0.5rem;
+        gap: min(9%, 7rem);
+
+        @media (min-width: $break-point) {
+            display: flex;
+
+            margin-inline: 0;
+
+            div {
+                flex-grow: 1;
+                flex-basis: 0;
+            }
+        }
+    }
+
+    h1 {
+        font-size: 24px;
+
+        margin-block-end: 1.5rem;
+    }
+
+    h2 {
+        position: relative;
+        left: 0.5rem;
+
+        font-size: 18px;
+        font-weight: 600;
+
+        @media (min-width: $break-point) {
+            display: inline-block;
+            margin-right: 1rem;
+        }
+    }
+
+    img {
+        width: 100%;
+    }
+
+    span + span::before {
+        content: ", "
+    }
+
+    ul {
+        font-size: 16px;
+        list-style: none;
+        line-height: 2.2;
+
+        margin-block-end: 2rem;
+
+        strong {
+            font-weight: 600;
+        }
+    }
+
+    .borders {
+        position: relative;
+
+        left: -0.5rem;
+    }
+
+    .borders a {
+        display: inline-block;
+        color: var(--clr-text);
+        background-color: var(--clr-elements);
+        border-radius: 0.2rem;
+        box-shadow: 0 0 0.5rem -0.25rem black;
+
+        font-size: 14px;
+
+        text-align: center;
+
+        width: 100%;
+
+        &:hover, &:focus-visible {
+            font-weight: 600;
+            outline-color: var(--clr-text);
+        }
+    }
+
+    .borders li {
+        display: inline-block;
+
+        min-width: 30%;
+
+        margin-top: 0.3rem;
+        margin-inline-start: 0.5rem;
+    }
+
+    .btn-back {
+        display: inline-block;
+        margin-inline: 0.5rem;
+
+        font-size: 14px;
+
+        color: var(--clr-text);
+        background-color: var(--clr-elements);
+        border-radius: 0.3rem;
+        padding: 0.5rem 1.5rem;
+        min-width: 7rem;
+
+        box-shadow: 0 0 0.5rem -0.25rem black;
+
+        margin-block-end: 4rem;
+
+        &::before {
+            display: inline-block;
+            content: "";
+            width: 0.8rem;
+            aspect-ratio: 1;
+
+            background-image: url("./images/chevron-left-solid.svg");
+            background-repeat: no-repeat;
+            background-size: auto;
+
+            vertical-align: top;
+            margin-top: 3px;
+            margin-inline-end: 1rem;
+        }
+
+        &:hover, &:focus-visible {
+            font-weight: 600;
+            outline-color: var(--clr-text);
+        }
+    }
+
+    .content {
+        
+    }
+
+    .desktop-flex {
+        @media (min-width: 1300px) {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+    }
+
+    .image-container {
+        margin-block-end: 2.5rem;
+    }
+</style>
