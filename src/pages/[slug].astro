@@ -9,6 +9,7 @@ export async function getStaticPaths() {
     type Country = {
         name: {
             official: string;
+            common: string;
         }
     }
 
@@ -17,7 +18,8 @@ export async function getStaticPaths() {
             typeof obj === 'object' &&
             obj !== null &&
             'name' in obj &&
-            'official' in obj.name
+            'official' in obj.name &&
+            'common' in obj.name
         );
     }
 
@@ -61,7 +63,7 @@ const borderCountries = borders ? borders.map(code => {
 
             <div class="desktop-flex">
                 <ul class="stats-1">
-                    <li><strong>Native Name: </strong><span>{ name.nativeName[Object.keys(languages)[0]].common }</span></li>
+                    <li><strong>Native Name: </strong><span>{ name.nativeName && (name.nativeName[Object.keys(languages)[0]] ? name.nativeName[Object.keys(languages)[0]].common : name.nativeName[Object.keys(languages)[1]].common) }</span></li>
                     <li><strong>Population: </strong><span>{ population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span></li>
                     <li><strong>Region: </strong><span>{ region }</span></li>
                     <li><strong>Sub Region: </strong><span>{ subregion }</span></li>
@@ -71,12 +73,12 @@ const borderCountries = borders ? borders.map(code => {
                 <ul class="stats-2">
                     <li><strong>Top Level Domain: </strong><span>{ tld }</span></li>
                     <li><strong>Currencies: </strong>{ currencies && Object.values(currencies).map((item) => (<span>{item['name']}</span>)) }</li>
-                    <li><strong>Languages: </strong>{ Object.values(languages).map((item) => (<span>{item}</span>)) }</li>
+                    <li><strong>Languages: </strong>{ languages && Object.values(languages).map((item) => (<span>{item}</span>)) }</li>
                 </ul>
             </div>
             
             <ul class="borders">
-                <h2>Border Countries:</h2>
+                { borderCountries.length > 0 && <h2>Border Countries:</h2> }
                 { borderCountries.map((country) => (<li><a href={`/${country.replaceAll(' ', '-').toLowerCase()}`}>{country}</a></li>)) }
             </ul>
         </div>
@@ -219,8 +221,11 @@ const borderCountries = borders ? borders.map(code => {
     .desktop-flex {
         @media (min-width: 1300px) {
             display: flex;
-            justify-content: space-between;
             gap: 1rem;
+
+            & > ul {
+                flex-grow: 1;
+            }
         }
     }
 
