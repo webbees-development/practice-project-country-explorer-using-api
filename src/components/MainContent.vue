@@ -39,7 +39,7 @@
 				</article>
 			</a>
 		</div>
-		
+
     </div>
 </template>
 
@@ -131,23 +131,6 @@ export default {
 		}
 	}
 
-	select {
-		background-color: var(--clr-elements);
-		border: none;
-		color: var(--clr-input);
-
-		padding: 1rem 1rem;
-		border-radius: 0.5rem;
-
-		box-shadow: 0 0 1.5rem -1.2rem black;
-
-		margin-top: 2.5rem;
-
-		&:focus-visible {
-			outline-color: var(--clr-text);
-		}
-	}
-
 	.card {
 		border-radius: 0.5rem;
 		overflow: hidden;
@@ -212,5 +195,37 @@ export default {
 
 	.image-container > img {
 		width: 100%;
+		aspect-ratio: 4 / 2;
+	}
+
+	/* Styles for Custom Select Item */
+	select {
+		appearance: none;
+
+		background-color: var(--clr-elements);
+		border: none;
+		color: var(--clr-input);
+
+		padding: 1rem 1rem;
+		border-radius: 0.5rem;
+
+		box-shadow: 0 0 1.5rem -1.2rem black;
+
+		margin-top: 2.5rem;
+
+		/* change the arrow */
+		padding-right: 3rem;
+		background-image: url("./images/chevron-left-solid.svg");
+		background-repeat: no-repeat;
+		background-size: 10px;
+		background-position: 90% 50%;
+
+		&:focus-visible {
+			outline-color: var(--clr-text);
+		}
+
+		&::-ms-expand {
+			background-image: url("./images/chevron-down-solid.svg");
+		}
 	}
 </style>
