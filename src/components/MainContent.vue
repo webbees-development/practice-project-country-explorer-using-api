@@ -195,7 +195,7 @@ export default {
 
 	.image-container > img {
 		width: 100%;
-		aspect-ratio: 4 / 2;
+		aspect-ratio: 5 / 3;
 	}
 
 	/* Styles for Custom Select Item */
