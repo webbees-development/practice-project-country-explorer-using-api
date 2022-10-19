@@ -114,8 +114,8 @@ export default {
 
 			border: none;
 			background-color: var(--clr-input);
-			-webkit-mask: url("./images/magnifying-glass-solid.svg") no-repeat center;
-            mask: url("./images/magnifying-glass-solid.svg") no-repeat center;
+			-webkit-mask: url("/images/magnifying-glass-solid.svg") no-repeat center;
+            mask: url("/images/magnifying-glass-solid.svg") no-repeat center;
 
 			cursor: pointer;
 
@@ -215,7 +215,7 @@ export default {
 
 		/* change the arrow */
 		padding-right: 3rem;
-		background-image: url("./images/chevron-left-solid.svg");
+		background-image: url("/images/chevron-left-solid.svg");
 		background-repeat: no-repeat;
 		background-size: 10px;
 		background-position: 90% 50%;
@@ -225,7 +225,7 @@ export default {
 		}
 
 		&::-ms-expand {
-			background-image: url("./images/chevron-down-solid.svg");
+			background-image: url("/images/chevron-down-solid.svg");
 		}
 	}
 </style>
